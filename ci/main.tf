@@ -3,19 +3,19 @@ resource "google_service_account" "default" {
   display_name = "Custom SA for Capstone Terraform"
 }
 
-resource "google_compute_network" "captone-network" {
+resource "google_compute_network" "capstone-network" {
   name                    = "capstone-network"
   auto_create_subnetworks = true
 }
 
 resource "google_compute_firewall" "capstone" {
   name      = "capstone"
-  network   = google_compute_network.captone-network.name
+  network   = google_compute_network.capstone-network.name
   direction = "INGRESS"
 
   allow {
     protocol = "tcp"
-    ports    = ["5179", "5197"]
+    ports    = ["22", "5179", "5197"]
   }
 
   source_ranges = ["0.0.0.0/0"]
@@ -23,7 +23,7 @@ resource "google_compute_firewall" "capstone" {
 }
 
 resource "google_compute_address" "ip_address" {
-  name = "neos-devops-ip"
+  name = "capstone-ip"
 }
 
 resource "google_compute_instance" "capstone-vm" {
@@ -44,7 +44,7 @@ resource "google_compute_instance" "capstone-vm" {
   }
 
   network_interface {
-    network = google_compute_network.neos-network.name
+    network = google_compute_network.capstone-network.name
 
     access_config {
       nat_ip = google_compute_address.ip_address.address
