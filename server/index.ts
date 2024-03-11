@@ -79,17 +79,18 @@ app.get(
 );
 
 app.post(
-	"/change",
+	"/change/:id",
 	zValidator(
 		"json",
 		z.object({
-			shelfID: z.string(),
 			quantity: z.number(),
 			type: z.enum(["weight", "distance"]),
 		})
 	),
+	zValidator("param", z.object({ id: ShelfIDSchema })),
 	async (c) => {
-		const { shelfID, quantity, type } = c.req.valid("json");
+		const { quantity, type } = c.req.valid("json");
+		const { id: shelfID } = c.req.valid("param");
 
 		const shelf = await database.query.shelves.findFirst({
 			where: eq(shelves.id, shelfID),
