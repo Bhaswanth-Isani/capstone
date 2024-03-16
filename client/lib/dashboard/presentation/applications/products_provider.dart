@@ -2,6 +2,7 @@ import 'package:client/core/helpers/env.dart';
 import 'package:client/core/presentation/applications/dio_client.dart';
 import 'package:client/core/presentation/applications/isar_client.dart';
 import 'package:client/dashboard/api/product_api.dart';
+import 'package:client/shelf/presentation/applications/shelves_provider.dart';
 import 'package:dio/dio.dart';
 import 'package:isar/isar.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -15,6 +16,11 @@ ProductAPI productAPI(ProductAPIRef ref) {
 
 @riverpod
 Future<List<int>> productStock(ProductStockRef ref, String id) async {
+  final shelves = ref.watch(shelvesProvider);
+  if (shelves == null) {
+    await ref.read(shelvesProvider.notifier).getData();
+  }
+
   final stock = await ref.read(productAPIProvider).getStock(id);
   return stock;
 }

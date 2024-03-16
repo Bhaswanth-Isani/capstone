@@ -136,11 +136,11 @@ class _BarChart extends StatelessWidget {
         end: Alignment.topCenter,
       );
 
-  List<BarChartGroupData> get barGroups => stock
+  List<BarChartGroupData> get barGroups => List.generate(12, (index) => index)
       .map(
         (e) => BarChartGroupData(
           x: e,
-          barRods: [BarChartRodData(toY: stock[e].toDouble(), gradient: _barsGradient)],
+          barRods: [BarChartRodData(fromY: 0, toY: stock[e].toDouble(), gradient: _barsGradient)],
           showingTooltipIndicators: [0],
         ),
       )

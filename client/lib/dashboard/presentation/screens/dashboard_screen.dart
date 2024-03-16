@@ -149,7 +149,9 @@ class DashboardScreen extends HookConsumerWidget {
                     borderRadius: EditorTheme.r2,
                     border: Border.all(color: EditorTheme.colors(context).outline),
                   ),
-                  child: ProductChart(productStock.valueOrNull ?? []),
+                  child: productStock.valueOrNull != null
+                      ? ProductChart(productStock.value!)
+                      : const Center(child: AppProgressIndicator()),
                 ),
               ],
             ),
