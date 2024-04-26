@@ -1,4 +1,3 @@
-import 'package:client/core/presentation/applications/isar_client.dart';
 import 'package:client/core/presentation/components/es_widgets.dart';
 import 'package:client/core/presentation/components/svg_icon.dart';
 import 'package:client/core/presentation/theme/editor_icons.dart';
@@ -68,9 +67,7 @@ class NotificationComponent extends ConsumerWidget {
                 items: [
                   ESMenuSingleItem(
                     onTap: () {
-                      ref
-                          .read(isarClientProvider)
-                          .write((isar) => isar.shelfLogs.delete(shelfLog.isarId));
+                      ref.read(shelvesProvider.notifier).deleteShelfLog(shelf!.id);
                     },
                     child: (hover) => Text(
                       'Delete',

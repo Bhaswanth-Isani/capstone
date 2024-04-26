@@ -39,14 +39,25 @@ app.post(
 				set: { timestamp: new Date() },
 			});
 
-		const malfunctionedShelves = await database.query.shelfLogs.findMany({
-			where: lte(shelfLogs.timestamp, new Date(Date.now() - 1000 * 90)),
-		});
+		const malfunctionedShelves = await database.query.shelfLogs.findMany();
 
 		if (malfunctionedShelves.length > 0) {
 			io.emit("shelf:malfunction", { shelves: malfunctionedShelves });
 		}
 
+		return c.json({});
+	}
+);
+
+app.delete(
+	"/logs/:id",
+	zValidator("param", z.object({ id: ShelfIDSchema })),
+	async (c) => {
+		const { id } = c.req.valid("param");
+
+		await database.delete(shelfLogs).where(eq(shelfLogs.id, id));
+
+		io.emit("shelf:malfunction-delete", { id });
 		return c.json({});
 	}
 );

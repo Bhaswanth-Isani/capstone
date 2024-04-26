@@ -44,4 +44,8 @@ abstract class ShelfAPI {
   @DELETE('/shelves/{id}')
   @Headers({'Content-Type': 'application/json'})
   Future<void> deleteShelf(@Path('id') String id);
+
+  @DELETE('/logs/{id}')
+  @Headers({'Content-Type': 'application/json'})
+  Future<void> deleteShelfLog(@Path('id') String id);
 }

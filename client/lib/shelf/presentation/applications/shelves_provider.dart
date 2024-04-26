@@ -1,6 +1,7 @@
 import 'package:client/core/helpers/env.dart';
 import 'package:client/core/presentation/applications/dio_client.dart';
 import 'package:client/core/presentation/applications/isar_client.dart';
+import 'package:client/notifications/model/shelf_logs.dart';
 import 'package:client/shelf/api/shelf_api.dart';
 import 'package:dio/dio.dart';
 import 'package:isar/isar.dart';
@@ -57,7 +58,6 @@ class Shelves extends _$Shelves {
       await ref.read(shelfAPIProvider).updateShelf(shelf.id, shelf);
       return null;
     } on DioException catch (error) {
-      print(error.response);
       isar.write((isar) => isar.shelves.put(previousShelf));
       return (error.response is String) ? error.response.toString() : 'Something went wrong';
     } catch (_) {
@@ -75,11 +75,31 @@ class Shelves extends _$Shelves {
       await ref.read(shelfAPIProvider).deleteShelf(shelf.id);
       return null;
     } on DioException catch (error) {
-      print(error.response);
       isar.write((isar) => isar.shelves.put(previousShelf));
       return (error.response is String) ? error.response.toString() : 'Something went wrong';
     } catch (_) {
       isar.write((isar) => isar.shelves.put(previousShelf));
+      return 'Something went wrong';
+    }
+  }
+
+  Future<String?> deleteShelfLog(String id) async {
+    final isar = ref.read(isarClientProvider);
+    final shelfLog = isar.shelfLogs.get(Isar.fastHash(id));
+
+    if (shelfLog == null) {
+      return null;
+    }
+
+    isar.write((isar) => isar.shelfLogs.delete(shelfLog.isarId));
+    try {
+      await ref.read(shelfAPIProvider).deleteShelfLog(id);
+      return null;
+    } on DioException catch (error) {
+      isar.write((isar) => isar.shelfLogs.put(shelfLog));
+      return (error.response is String) ? error.response.toString() : 'Something went wrong';
+    } catch (_) {
+      isar.write((isar) => isar.shelfLogs.put(shelfLog));
       return 'Something went wrong';
     }
   }
