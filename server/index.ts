@@ -132,8 +132,13 @@ app.post(
 				.set({ quantity: updatedQuantity })
 				.where(eq(shelves.id, shelfID));
 		} else {
-			updatedQuantity =
-				(parseFloat(shelf.size) - quantity) / parseFloat(product.size);
+			updatedQuantity = Math.round(
+				(parseFloat(shelf.size) - quantity) / parseFloat(product.size)
+			);
+
+			if (updatedQuantity < 0) {
+				return c.json({ message: "Updated" });
+			}
 			await database
 				.update(shelves)
 				.set({ quantity: updatedQuantity })
