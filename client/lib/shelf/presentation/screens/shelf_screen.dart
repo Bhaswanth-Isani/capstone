@@ -70,7 +70,7 @@ class ShelfScreen extends HookConsumerWidget {
                       return GridView.builder(
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: max(1, constraints.maxWidth ~/ 400),
-                          childAspectRatio: 3 / 1,
+                          childAspectRatio: 5 / 2,
                           crossAxisSpacing: 16,
                           mainAxisSpacing: 16,
                         ),
