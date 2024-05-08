@@ -146,6 +146,7 @@ app.post(
 		}
 
 		await database.delete(shelfLogs).where(eq(shelfLogs.id, shelfID));
+		io.emit("shelf:malfunction-delete", { shelfID });
 
 		const returnShelf = await database.query.shelves.findFirst({
 			where: eq(shelves.id, shelfID),
