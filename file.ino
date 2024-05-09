@@ -50,6 +50,7 @@ void loop() {
     if (distance == 0) {
       Serial.println("Sensor malfunctioned. Pinging server...");
       malfunctionPingServer();
+      lastDistance = distance;
     } else {
       // Check if there's a significant change in distance
       if (abs(distance - lastDistance) > 2) { // Change threshold is 2cm

@@ -56,6 +56,10 @@ class Realtime extends _$Realtime {
             .toList();
         isar.write((isar) => isar.shelfLogs.putAll(shelfLogs));
       })
+      ..on('shelf:malfunction-delete', (data) {
+        final shelfLogs = (data as Map<String, dynamic>)['shelfID'] as String;
+        isar.write((isar) => isar.shelfLogs.delete(Isar.fastHash(shelfLogs)));
+      })
       ..on('product:save', (data) {
         final product = Product.fromJson(
           (data as Map<String, dynamic>)['product'] as Map<String, dynamic>,
